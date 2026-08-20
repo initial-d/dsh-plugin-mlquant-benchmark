@@ -30,6 +30,25 @@ const DEFAULT_COMMAND = [
 
 const DEFAULT_JSON_OUT = "artifacts/benchmark-v1.json";
 const MAX_CAPTURE_CHARS = 12000;
+const EXPECTED_ENVIRONMENT = {
+  protocol: "v1",
+  n_dates: 750,
+  n_stocks: 1000,
+  window: 20,
+  warmup: 3,
+  repeat: 10,
+  seed: 42,
+  pytorch_threads: 1,
+  pytorch_interop_threads: 1,
+};
+const EXPECTED_CASES = [
+  "cs_rank(close)",
+  "ts_mean(close,20)",
+  "ts_rank(close,20)",
+  "ts_corr(close,returns,20)",
+  "ewma(close,0.05)",
+  "compute_legacy_set(6 factors)",
+];
 
 function resolveRepoPath(repoPath) {
   return path.resolve(repoPath ?? process.cwd());
@@ -115,9 +134,113 @@ function summarizeBenchmarkJson(payload, jsonPath) {
   };
 }
 
+function isRecord(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function validateBenchmarkPayload(payload, jsonPath) {
+  const errors = [];
+  const warnings = [];
+  if (!isRecord(payload)) {
+    return {
+      valid: false,
+      jsonPath,
+      errors: ["Benchmark JSON root must be an object."],
+      warnings,
+      summary: "Invalid benchmark JSON root.",
+    };
+  }
+
+  if (payload.schema_version !== 1) {
+    errors.push(`schema_version must be 1, got ${JSON.stringify(payload.schema_version)}.`);
+  }
+
+  const environment = payload.environment;
+  if (!isRecord(environment)) {
+    errors.push("environment must be an object.");
+  } else {
+    for (const [key, expected] of Object.entries(EXPECTED_ENVIRONMENT)) {
+      if (environment[key] !== expected) {
+        errors.push(`environment.${key} must be ${JSON.stringify(expected)}, got ${JSON.stringify(environment[key])}.`);
+      }
+    }
+    for (const key of ["python", "platform", "cpu", "pytorch"]) {
+      if (typeof environment[key] !== "string" || environment[key].trim() === "") {
+        errors.push(`environment.${key} must be a non-empty string.`);
+      }
+    }
+    if (typeof environment.cuda_available !== "boolean") {
+      errors.push("environment.cuda_available must be a boolean.");
+    }
+    if (!Number.isInteger(environment.logical_cpus) || environment.logical_cpus < 1) {
+      warnings.push("environment.logical_cpus is missing or not a positive integer.");
+    }
+  }
+
+  const results = payload.results;
+  if (!Array.isArray(results)) {
+    errors.push("results must be an array.");
+  } else {
+    if (results.length !== EXPECTED_CASES.length) {
+      errors.push(`results must contain ${EXPECTED_CASES.length} rows, got ${results.length}.`);
+    }
+    const seenCases = new Set();
+    for (const [index, row] of results.entries()) {
+      if (!isRecord(row)) {
+        errors.push(`results[${index}] must be an object.`);
+        continue;
+      }
+      seenCases.add(row.case);
+      if (!["cpu", "cuda"].includes(row.device)) {
+        errors.push(`results[${index}].device must be "cpu" or "cuda".`);
+      }
+      if (typeof row.case !== "string" || row.case.trim() === "") {
+        errors.push(`results[${index}].case must be a non-empty string.`);
+      }
+      if (typeof row.mean_seconds !== "number" || !(row.mean_seconds > 0)) {
+        errors.push(`results[${index}].mean_seconds must be a positive number.`);
+      }
+      if (typeof row.std_seconds !== "number" || row.std_seconds < 0) {
+        errors.push(`results[${index}].std_seconds must be a non-negative number.`);
+      }
+      if (typeof row.peak_cuda_memory !== "string") {
+        errors.push(`results[${index}].peak_cuda_memory must be a string.`);
+      }
+      if (
+        typeof row.mean_seconds === "number"
+        && typeof row.std_seconds === "number"
+        && row.mean_seconds > 0
+        && row.std_seconds / row.mean_seconds >= 0.25
+      ) {
+        warnings.push(`${row.case}: std/mean ${(row.std_seconds / row.mean_seconds).toFixed(2)}`);
+      }
+    }
+    for (const expectedCase of EXPECTED_CASES) {
+      if (!seenCases.has(expectedCase)) {
+        errors.push(`results is missing case ${JSON.stringify(expectedCase)}.`);
+      }
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    jsonPath,
+    errors,
+    warnings,
+    summary: errors.length === 0
+      ? `Benchmark artifact is valid (${Array.isArray(results) ? results.length : 0} result rows).`
+      : `Benchmark artifact has ${errors.length} validation error(s).`,
+  };
+}
+
 async function readBenchmarkJsonFile(jsonPath) {
   const text = await readFile(jsonPath, "utf8");
   return summarizeBenchmarkJson(JSON.parse(text), jsonPath);
+}
+
+async function validateBenchmarkJsonFile(jsonPath) {
+  const text = await readFile(jsonPath, "utf8");
+  return validateBenchmarkPayload(JSON.parse(text), jsonPath);
 }
 
 function runProcess(command, args, options) {
@@ -325,6 +448,42 @@ export function apply(ctx, config = {}) {
       const repoPath = resolveRepoPath(args.repoPath ?? defaultRepoPath);
       const jsonPath = resolveArtifactPath(repoPath, args.jsonPath);
       return readBenchmarkJsonFile(jsonPath);
+    },
+  }));
+
+  ctx.tools.register(defineTool({
+    name: "mlquant_validate_benchmark_json",
+    description: "Validate an ml-quant-trading benchmark JSON artifact against protocol v1 expectations and report caveats.",
+    parameters: {
+      repoPath: { type: "string", description: "Path to an ml-quant-trading checkout. Defaults to the current workspace." },
+      jsonPath: { type: "string", description: "Artifact path relative to repoPath or absolute path. Defaults to artifacts/benchmark-v1.json." },
+    },
+    output: {
+      schema: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          valid: { type: "boolean", required: true },
+          jsonPath: { type: "string", required: true },
+          errors: { type: "array", required: true, items: { type: "string" } },
+          warnings: { type: "array", required: true, items: { type: "string" } },
+          summary: { type: "string", required: true },
+        },
+      },
+      render: (_args, value) => [{
+        type: "text",
+        text: [
+          value.summary,
+          `JSON artifact: ${value.jsonPath}`,
+          value.errors.length > 0 ? `Errors:\n${value.errors.join("\n")}` : "",
+          value.warnings.length > 0 ? `Warnings:\n${value.warnings.join("\n")}` : "",
+        ].filter(Boolean).join("\n\n"),
+      }],
+    },
+    async execute(args) {
+      const repoPath = resolveRepoPath(args.repoPath ?? defaultRepoPath);
+      const jsonPath = resolveArtifactPath(repoPath, args.jsonPath);
+      return validateBenchmarkJsonFile(jsonPath);
     },
   }));
 

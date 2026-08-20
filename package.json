@@ -18,8 +18,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "check": "node scripts/check-readiness.mjs && node test/register-tools.test.js && node test/manifest.test.js && node test/issue-draft.test.js",
-    "test": "node test/register-tools.test.js && node test/manifest.test.js && node test/issue-draft.test.js"
+    "check": "node scripts/check-readiness.mjs && node test/register-tools.test.js && node test/manifest.test.js && node test/issue-draft.test.js && node test/validation.test.js",
+    "test": "node test/register-tools.test.js && node test/manifest.test.js && node test/issue-draft.test.js && node test/validation.test.js"
   },
   "keywords": [
     "dsh-plugin",

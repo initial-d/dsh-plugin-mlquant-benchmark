@@ -1,7 +1,8 @@
 # Tool Contracts
 
-This plugin registers three tools. Their scope is deliberately narrow: run the
-documented benchmark, read the generated JSON, and draft a report body.
+This plugin registers four tools. Their scope is deliberately narrow: run the
+documented benchmark, read and validate the generated JSON, and draft a report
+body.
 
 ## `mlquant_benchmark_v1_cpu`
 
@@ -31,6 +32,21 @@ Reads an existing benchmark JSON artifact and returns:
 - raw result rows;
 - Markdown result table;
 - variance warnings for rows whose `std / mean >= 0.25`.
+
+## `mlquant_validate_benchmark_json`
+
+Checks an existing benchmark JSON artifact against protocol v1 expectations.
+
+It verifies:
+
+- `schema_version` is `1`;
+- fixed environment parameters match the documented protocol;
+- core environment fields are present;
+- the six expected benchmark cases are present;
+- timing values are numeric and positive;
+- high-variance rows are surfaced as warnings.
+
+The tool returns `valid`, `errors`, `warnings`, and a short summary.
 
 ## `mlquant_draft_github_issue`
 

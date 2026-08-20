@@ -11,6 +11,7 @@ to list its available tools. The expected tool names are:
 
 - `mlquant_benchmark_v1_cpu`
 - `mlquant_read_benchmark_json`
+- `mlquant_validate_benchmark_json`
 - `mlquant_draft_github_issue`
 
 If the tools do not appear:

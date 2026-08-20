@@ -5,9 +5,9 @@ DeepSeek Harness tools for reproducing the
 protocol v1 CPU benchmark.
 
 The point is narrow: make a DSH agent able to run the existing benchmark, read
-the machine-readable artifact, and draft an issue-ready report. This plugin does
-not add a trading agent, does not call market data APIs, and does not configure
-any model provider.
+the machine-readable artifact, validate it against the benchmark protocol, and
+draft an issue-ready report. This plugin does not add a trading agent, does not
+call market data APIs, and does not configure any model provider.
 
 ## Why this exists
 
@@ -24,12 +24,13 @@ the evidence bundle, and avoid turning runtime numbers into alpha claims?
 
 ## Tools
 
-This package registers three DSH tools:
+This package registers four DSH tools:
 
 | Tool | Purpose |
 | --- | --- |
 | `mlquant_benchmark_v1_cpu` | Run the fixed protocol v1 CPU benchmark and write `artifacts/benchmark-v1.json`. |
 | `mlquant_read_benchmark_json` | Read the JSON artifact and render a compact Markdown result table. |
+| `mlquant_validate_benchmark_json` | Check protocol v1 fields, expected cases, fixed parameters, and variance warnings. |
 | `mlquant_draft_github_issue` | Draft a DeepSeek Harness benchmark issue body from the JSON artifact. It does not post to GitHub. |
 
 ## Install
@@ -62,9 +63,10 @@ is real usage.
 
 ```text
 Read AGENTS.md, docs/benchmarking.md, and docs/reality_check.md.
-Use the mlquant benchmark tools to run the protocol v1 CPU benchmark, read the
-JSON artifact, and draft a DeepSeek Harness benchmark report. Keep the result as
-an engineering reproducibility benchmark, not a trading-performance claim.
+Use the mlquant benchmark tools to run the protocol v1 CPU benchmark, validate
+and read the JSON artifact, and draft a DeepSeek Harness benchmark report. Keep
+the result as an engineering reproducibility benchmark, not a trading-performance
+claim.
 ```
 
 ## Public report path
@@ -85,7 +87,8 @@ npm test
 ```
 
 The test loads the plugin with a mock `ctx.tools.register`, verifies that the
-three tools register, reads a sample artifact, and drafts an issue body.
+four tools register, reads and validates sample artifacts, and drafts an issue
+body.
 
 ## Non-goals
 

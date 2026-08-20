@@ -8,6 +8,7 @@ All notable changes to this project are documented here.
 
 - DSH tool registration for the `ml-quant-trading` protocol v1 CPU benchmark.
 - JSON artifact reader that renders the benchmark result table.
+- JSON artifact validator for protocol v1 fields, expected cases, and caveats.
 - GitHub issue body drafter for DeepSeek Harness benchmark reports.
 - `dsh.bundle` manifest for `dsh plugin add` installation.
 

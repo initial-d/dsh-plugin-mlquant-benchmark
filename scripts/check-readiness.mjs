@@ -14,11 +14,12 @@ assert.match(patch, /name:\s+dsh-plugin-mlquant-benchmark/);
 for (const toolName of [
   "mlquant_benchmark_v1_cpu",
   "mlquant_read_benchmark_json",
+  "mlquant_validate_benchmark_json",
   "mlquant_draft_github_issue",
 ]) {
   assert.match(readme, new RegExp(toolName));
 }
 
-assert.match(readme, /not a trading-performance claim/i);
+assert.match(readme, /not a trading-performance\s+claim/i);
 
 console.log("readiness checks passed");

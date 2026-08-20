@@ -3,8 +3,9 @@ Read AGENTS.md, docs/benchmarking.md, docs/deepseek_harness_recipe.md, and docs/
 Use the mlquant benchmark tools to:
 
 1. Run the protocol v1 CPU benchmark.
-2. Read the generated benchmark JSON artifact.
-3. Draft a DeepSeek Harness benchmark issue body.
+2. Validate the generated benchmark JSON artifact.
+3. Read the generated benchmark JSON artifact.
+4. Draft a DeepSeek Harness benchmark issue body.
 
 Keep the interpretation boundary explicit:
 

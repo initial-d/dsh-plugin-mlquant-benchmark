@@ -22,6 +22,7 @@ assert.deepEqual([...registered.keys()].sort(), [
   "mlquant_benchmark_v1_cpu",
   "mlquant_draft_github_issue",
   "mlquant_read_benchmark_json",
+  "mlquant_validate_benchmark_json",
 ]);
 
 const tmp = await mkdtemp(path.join(os.tmpdir(), "mlquant-dsh-plugin-"));
@@ -36,27 +37,35 @@ try {
       cpu: "TestCPU",
       pytorch: "2.11.0+cpu",
       cuda_available: false,
+      logical_cpus: 8,
       n_dates: 750,
       n_stocks: 1000,
+      window: 20,
       warmup: 3,
       repeat: 10,
       seed: 42,
       pytorch_threads: 1,
       pytorch_interop_threads: 1,
     },
-    results: [{
-      device: "cpu",
-      case: "ts_mean(close,20)",
-      mean_seconds: 0.01,
-      std_seconds: 0.001,
-      peak_cuda_memory: "-",
-    }],
+    results: [
+      { device: "cpu", case: "cs_rank(close)", mean_seconds: 0.02, std_seconds: 0.001, peak_cuda_memory: "-" },
+      { device: "cpu", case: "ts_mean(close,20)", mean_seconds: 0.01, std_seconds: 0.001, peak_cuda_memory: "-" },
+      { device: "cpu", case: "ts_rank(close,20)", mean_seconds: 0.03, std_seconds: 0.002, peak_cuda_memory: "-" },
+      { device: "cpu", case: "ts_corr(close,returns,20)", mean_seconds: 0.04, std_seconds: 0.003, peak_cuda_memory: "-" },
+      { device: "cpu", case: "ewma(close,0.05)", mean_seconds: 0.01, std_seconds: 0.001, peak_cuda_memory: "-" },
+      { device: "cpu", case: "compute_legacy_set(6 factors)", mean_seconds: 0.07, std_seconds: 0.004, peak_cuda_memory: "-" },
+    ],
   }, null, 2));
 
   const readTool = registered.get("mlquant_read_benchmark_json");
   const summary = await readTool.execute({ repoPath: tmp }, { signal: new AbortController().signal });
   assert.equal(summary.schemaVersion, 1);
   assert.match(summary.resultTable, /ts_mean/);
+
+  const validateTool = registered.get("mlquant_validate_benchmark_json");
+  const validation = await validateTool.execute({ repoPath: tmp }, { signal: new AbortController().signal });
+  assert.equal(validation.valid, true);
+  assert.deepEqual(validation.errors, []);
 
   const draftTool = registered.get("mlquant_draft_github_issue");
   const draft = await draftTool.execute({
