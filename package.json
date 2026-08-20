@@ -9,7 +9,12 @@
   },
   "files": [
     "src",
+    "cordis.patch.yml",
+    "docs",
+    "examples",
     "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
     "LICENSE"
   ],
   "scripts": {
