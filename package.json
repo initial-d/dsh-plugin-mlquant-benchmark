@@ -1,0 +1,38 @@
+{
+  "name": "dsh-plugin-mlquant-benchmark",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness tools for reproducing the ml-quant-trading protocol v1 benchmark.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node test/register-tools.test.js"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "quantitative-finance",
+    "benchmark",
+    "reproducibility",
+    "pytorch",
+    "mlquant"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/initial-d/dsh-plugin-mlquant-benchmark.git"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "^0.1.0-rc.7"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-tools": "^0.1.0-rc.7"
+  }
+}
