@@ -1,5 +1,7 @@
 # dsh-plugin-mlquant-benchmark
 
+[![CI](https://github.com/initial-d/dsh-plugin-mlquant-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/initial-d/dsh-plugin-mlquant-benchmark/actions/workflows/ci.yml)
+
 DeepSeek Harness tools for reproducing the
 [`initial-d/ml-quant-trading`](https://github.com/initial-d/ml-quant-trading)
 protocol v1 CPU benchmark.

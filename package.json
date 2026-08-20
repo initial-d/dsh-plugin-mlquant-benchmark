@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "DeepSeek Harness tools for reproducing the ml-quant-trading protocol v1 benchmark.",
   "type": "module",
+  "packageManager": "pnpm@11.19.0",
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js"

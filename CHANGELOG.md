@@ -11,6 +11,7 @@ All notable changes to this project are documented here.
 - JSON artifact validator for protocol v1 fields, expected cases, and caveats.
 - GitHub issue body drafter for DeepSeek Harness benchmark reports.
 - `dsh.bundle` manifest for `dsh plugin add` installation.
+- GitHub Actions CI for readiness checks, tool tests, and package dry runs.
 
 ### Notes
 
