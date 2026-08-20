@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node test/register-tools.test.js && node test/manifest.test.js"
+    "test": "node test/register-tools.test.js && node test/manifest.test.js && node test/issue-draft.test.js"
   },
   "keywords": [
     "dsh-plugin",
