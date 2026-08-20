@@ -34,21 +34,20 @@ This package registers three DSH tools:
 
 ## Install
 
-Install the package in a DeepSeek Harness profile or preset environment from
-GitHub:
+Install the package in a DeepSeek Harness profile or preset environment:
 
 ```bash
-pnpm add github:initial-d/dsh-plugin-mlquant-benchmark
+dsh plugin --profile web add github:initial-d/dsh-plugin-mlquant-benchmark
 ```
 
-Then add the plugin to a Cordis composition:
+The package declares a `dsh.bundle` manifest that inserts:
 
 ```yaml
 - id: mlquant-benchmark
   name: dsh-plugin-mlquant-benchmark
 ```
 
-If you use a local checkout while developing:
+If you use a local checkout while developing, add the same row manually:
 
 ```yaml
 - id: mlquant-benchmark

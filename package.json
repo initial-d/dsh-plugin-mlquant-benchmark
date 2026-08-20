@@ -29,6 +29,11 @@
     "type": "git",
     "url": "git+https://github.com/initial-d/dsh-plugin-mlquant-benchmark.git"
   },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
   "peerDependencies": {
     "@deepseek-ai/dsh-tools": "^0.1.0-rc.7"
   },
