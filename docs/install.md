@@ -6,6 +6,11 @@ Install the plugin into a DSH profile:
 dsh plugin --profile web add github:initial-d/dsh-plugin-mlquant-benchmark
 ```
 
+The plugin is listed in
+[`awesome-dsh-plugin`](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
+under Development & Runtime, so users can also discover it through the public
+DSH plugin index.
+
 Open a workspace that contains `initial-d/ml-quant-trading`, then ask the agent
 to list its available tools. The expected tool names are:
 

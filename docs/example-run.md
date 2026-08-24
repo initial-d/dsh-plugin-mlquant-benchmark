@@ -39,6 +39,11 @@ Seed report:
 https://github.com/initial-d/ml-quant-trading/issues/61
 ```
 
+If you found the plugin through
+[`awesome-dsh-plugin`](https://awesome-dsh-plugin.com/#development--runtime),
+mention that in the report summary. It helps separate DSH discovery from normal
+shell-only benchmark runs without changing the benchmark protocol.
+
 ## Interpretation Boundary
 
 The final report should say what happened, not what the numbers supposedly

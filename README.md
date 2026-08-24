@@ -1,6 +1,7 @@
 # dsh-plugin-mlquant-benchmark
 
 [![CI](https://github.com/initial-d/dsh-plugin-mlquant-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/initial-d/dsh-plugin-mlquant-benchmark/actions/workflows/ci.yml)
+[![Listed on Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com/#development--runtime)
 
 DeepSeek Harness tools for reproducing the
 [`initial-d/ml-quant-trading`](https://github.com/initial-d/ml-quant-trading)
@@ -23,6 +24,20 @@ call market data APIs, and does not configure any model provider.
 
 Challenge: can DeepSeek Harness reproduce a quant benchmark end to end, preserve
 the evidence bundle, and avoid turning runtime numbers into alpha claims?
+
+Listed in
+[`awesome-dsh-plugin`](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
+via [PR #2573](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/pull/2573).
+
+## Run-To-Report Path
+
+1. Install the plugin from GitHub.
+2. Open an `initial-d/ml-quant-trading` checkout in DSH.
+3. Ask DSH to run, validate, summarize, and draft a benchmark report.
+4. Submit the drafted report through the dedicated issue template.
+
+That path is intentionally small: the plugin turns DSH attention into a
+reproducible benchmark report, not an investment or leaderboard claim.
 
 ## Tools
 
@@ -80,6 +95,11 @@ Post the drafted report through the main repository's dedicated template:
 Seed example:
 
 <https://github.com/initial-d/ml-quant-trading/issues/61>
+
+For context and agent-facing guardrails, read the main repository's
+[`DeepSeek Harness Recipe`](https://github.com/initial-d/ml-quant-trading/blob/main/docs/deepseek_harness_recipe.md)
+and
+[`Quant Agent Reproducibility Target`](https://github.com/initial-d/ml-quant-trading/blob/main/docs/quant_agent_reproducibility_target.md).
 
 ## Development
 
