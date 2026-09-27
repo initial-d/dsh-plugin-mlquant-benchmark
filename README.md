@@ -96,6 +96,14 @@ Seed example:
 
 <https://github.com/initial-d/ml-quant-trading/issues/61>
 
+Independent DSH runs are tracked in the plugin challenge issue:
+
+<https://github.com/initial-d/dsh-plugin-mlquant-benchmark/issues/1>
+
+Post there if the plugin failed before a valid `benchmark-v1.json` artifact was
+created. Post successful or caveated benchmark reports through the main
+repository template above.
+
 For context and agent-facing guardrails, read the main repository's
 [`DeepSeek Harness Recipe`](https://github.com/initial-d/ml-quant-trading/blob/main/docs/deepseek_harness_recipe.md)
 and

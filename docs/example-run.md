@@ -39,6 +39,16 @@ Seed report:
 https://github.com/initial-d/ml-quant-trading/issues/61
 ```
 
+Plugin challenge:
+
+```text
+https://github.com/initial-d/dsh-plugin-mlquant-benchmark/issues/1
+```
+
+Use the challenge issue for plugin installation, tool registration, or
+artifact-generation blockers. Use the main repository template for completed
+benchmark reports.
+
 If you found the plugin through
 [`awesome-dsh-plugin`](https://awesome-dsh-plugin.com/#development--runtime),
 mention that in the report summary. It helps separate DSH discovery from normal

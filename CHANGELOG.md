@@ -8,6 +8,7 @@ All notable changes to this project are documented here.
 
 - README badge and docs links for the `awesome-dsh-plugin` listing.
 - Run-to-report guidance for turning DSH discovery into a benchmark report.
+- Public challenge issue routing for successful reports versus plugin blockers.
 
 ## 0.1.0 - 2026-08-20
 
