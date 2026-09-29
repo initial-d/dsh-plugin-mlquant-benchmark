@@ -36,13 +36,22 @@ try {
       pytorch_threads: 1,
       pytorch_interop_threads: 1,
     },
-    results: [{
-      device: "cpu",
-      case: "ts_mean(close,20)",
-      mean_seconds: 0.01,
-      std_seconds: 0.001,
-      peak_cuda_memory: "-",
-    }],
+    results: [
+      {
+        device: "cuda",
+        case: "cs_rank(close)",
+        mean_seconds: 0.02,
+        std_seconds: 0.001,
+        peak_cuda_memory: "1 MB",
+      },
+      {
+        device: "cpu",
+        case: "ts_mean(close,20)",
+        mean_seconds: 0.01,
+        std_seconds: 0.001,
+        peak_cuda_memory: "-",
+      },
+    ],
   }, null, 2));
 
   const validation = await registered.get("mlquant_validate_benchmark_json").execute(
@@ -54,7 +63,8 @@ try {
   assert.match(validation.summary, /validation error/);
   assert.ok(validation.errors.some((line) => line.includes("environment.repeat")));
   assert.ok(validation.errors.some((line) => line.includes("results must contain 6 rows")));
-  assert.ok(validation.errors.some((line) => line.includes("cs_rank(close)")));
+  assert.ok(validation.errors.some((line) => line.includes("device must be \"cpu\"")));
+  assert.ok(validation.errors.some((line) => line.includes("ts_rank(close,20)")));
 } finally {
   await rm(tmp, { recursive: true, force: true });
 }

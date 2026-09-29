@@ -43,6 +43,7 @@ It verifies:
 - fixed environment parameters match the documented protocol;
 - core environment fields are present;
 - the six expected benchmark cases are present;
+- every result row is from the fixed CPU benchmark path;
 - timing values are numeric and positive;
 - high-variance rows are surfaced as warnings.
 

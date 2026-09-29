@@ -191,8 +191,8 @@ function validateBenchmarkPayload(payload, jsonPath) {
         continue;
       }
       seenCases.add(row.case);
-      if (!["cpu", "cuda"].includes(row.device)) {
-        errors.push(`results[${index}].device must be "cpu" or "cuda".`);
+      if (row.device !== "cpu") {
+        errors.push(`results[${index}].device must be "cpu" for protocol v1 CPU reports.`);
       }
       if (typeof row.case !== "string" || row.case.trim() === "") {
         errors.push(`results[${index}].case must be a non-empty string.`);
