@@ -46,7 +46,7 @@ try {
       },
       {
         device: "cpu",
-        case: "ts_mean(close,20)",
+        case: "cs_rank(close)",
         mean_seconds: 0.01,
         std_seconds: 0.001,
         peak_cuda_memory: "-",
@@ -63,6 +63,7 @@ try {
   assert.match(validation.summary, /validation error/);
   assert.ok(validation.errors.some((line) => line.includes("environment.repeat")));
   assert.ok(validation.errors.some((line) => line.includes("results must contain 6 rows")));
+  assert.ok(validation.errors.some((line) => line.includes("duplicates")));
   assert.ok(validation.errors.some((line) => line.includes("device must be \"cpu\"")));
   assert.ok(validation.errors.some((line) => line.includes("ts_rank(close,20)")));
 } finally {

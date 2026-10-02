@@ -190,6 +190,9 @@ function validateBenchmarkPayload(payload, jsonPath) {
         errors.push(`results[${index}] must be an object.`);
         continue;
       }
+      if (seenCases.has(row.case)) {
+        errors.push(`results[${index}].case duplicates ${JSON.stringify(row.case)}.`);
+      }
       seenCases.add(row.case);
       if (row.device !== "cpu") {
         errors.push(`results[${index}].device must be "cpu" for protocol v1 CPU reports.`);
